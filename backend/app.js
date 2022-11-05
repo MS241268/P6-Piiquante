@@ -2,11 +2,11 @@ const express = require('express')//Importation du package 'express'
 const app = express ()//Création application
 const dotenv = require('dotenv')//Importation du package 'dotenv'
 dotenv.config()
-const MyUrlOfDataBase = process.env.MyUrlOfDataBase//Chargement de la variable d'environnement 'MyUrlOfDataBase' situé de le fichier '.env'
+const myUrlOfDataBase = process.env.myUrlOfDataBase//Chargement de la variable d'environnement 'MyUrlOfDataBase' située dans le fichier '.env'
 const mongoose = require('mongoose')//Importation du package 'mongoose'
 
 //Connection API à la base de données MongoDB
-mongoose.connect(MyUrlOfDataBase,
+mongoose.connect(myUrlOfDataBase,
     //{ useNewUrlParser: true,//Plus nécessaire depuis mongoose 6 par défaut à 'true'
     //useUnifiedTopology: true }//Plus nécessaire depuis mongoose 6 par défaut à 'true'
     )

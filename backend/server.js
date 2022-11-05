@@ -17,7 +17,7 @@ const normalizePort = val => {
   }
 /****/
 
-//Détermination du port sur lequel "app" va s'éxécuter
+//Détermination du port sur lequel "app" va s'éxécuter : Port dans fichier '.env' ou port 3000 par défaut
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 /****/
