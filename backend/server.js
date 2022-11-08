@@ -1,5 +1,5 @@
 const http = require('http')//Importation du package hhtp de node
-const app = require('./app')
+const app = require('./app')//Importation de l'API
 
 //Renvoi d'un port valide
 const normalizePort = val => {
