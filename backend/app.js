@@ -6,8 +6,8 @@ app.use(express.json())//Accès au corps de la requête POST si celui-ci est au 
 const dotenv = require('dotenv')//Importation du package 'dotenv'
 dotenv.config()
 
-const myUrlOfDataBase = process.env.URL_DATABASE//Chargement de la variable d'environnement 'MyUrlOfDataBase' située dans le fichier '.env'
-const mongoose = require('mongoose')//Importation du package 'mongoose'
+const myUrlOfDataBase = process.env.URL_DATABASE//Chargement de la variable d'environnement 'URL_DATABASE' située dans le fichier '.env'
+const mongoose = require('mongoose')//Importation du package 'Mongoose'
 
 //Connection API à la base de données MongoDB
 mongoose.connect(myUrlOfDataBase,
