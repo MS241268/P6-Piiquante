@@ -9,6 +9,8 @@ dotenv.config()
 const myUrlOfDataBase = process.env.URL_DATABASE//Chargement de la variable d'environnement 'URL_DATABASE' située dans le fichier '.env'
 const mongoose = require('mongoose')//Importation du package 'Mongoose'
 
+const userRoutes = require('./routes/user')//Importation route 'user'
+
 //Connection API à la base de données MongoDB
 mongoose.connect(myUrlOfDataBase,
     //{ useNewUrlParser: true,//Plus nécessaire depuis mongoose 6 par défaut à 'true'
@@ -27,22 +29,23 @@ app.use((req, res, next) => {
   });
 /****/
 
-app.use((req, resp, next) => {
+app.use('api/auth', userRoutes)
+app.use((req, res, next) => {
     console.log('Requête reçue !')
     next()//Renvoi vers le prochain middleware (fonction)
 })
 
-app.use ((req, resp, next) => {
-    resp.status(200) //Code réponse 'requête réussie'
+app.use ((req, res, next) => {
+    res.status(200) //Code réponse 'requête réussie'
     next()//Renvoi vers le prochain middleware (fonction)
 })
 
-app.use((req, resp, next) => {
-    resp.json({ message: 'Votre requête a bien été reçue !!!'})
+app.use((req, res, next) => {
+    res.json({ message: 'Votre requête a bien été reçue !!!'})
     next()//Renvoi vers le prochain middleware (fonction)
 })
 
-app.use((req, resp) => {//Pas de méthode "next" car c'est le dernier middleware
+app.use((req, res) => {//Pas de méthode "next" car c'est le dernier middleware
     console.log('Réponse envoyée avec succès !')
 })
 

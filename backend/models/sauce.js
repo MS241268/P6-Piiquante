@@ -16,4 +16,4 @@ const sauceSchema = mongoose.Schema ({
 })
 /****/
 
-module.exports = moongoose.model('sauce', sauceSchema)//Export du schéma 'sauce' en tant que modèle Mongoose pour l'exploiter dans MongoDB
+module.exports = moongoose.model('Sauce', sauceSchema)//Export du schéma 'sauce' en tant que modèle Mongoose pour l'exploiter dans MongoDB

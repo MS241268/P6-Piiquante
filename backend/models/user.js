@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 //Construction du schéma "user" pour Mongoose
 const userSchema = mongoose.Schema ({
@@ -7,4 +8,5 @@ const userSchema = mongoose.Schema ({
 })
 /****/
 
-module.exports = moongoose.model('user', userSchema)//Export du schéma 'user' en tant que modèle Mongoose pour l'exploiter dans MongoDB
+userSchema.plugin(uniqueValidator)
+module.exports = moongoose.model('User', userSchema)//Export du schéma 'user' en tant que modèle Mongoose pour l'exploiter dans MongoDB
