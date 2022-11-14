@@ -29,7 +29,7 @@ app.use((req, res, next) => {
   });
 /****/
 
-app.use('api/auth', userRoutes)
+app.use('api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 'signup'
 app.use((req, res, next) => {
     console.log('Requête reçue !')
     next()//Renvoi vers le prochain middleware (fonction)
