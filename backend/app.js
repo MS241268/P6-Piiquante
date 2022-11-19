@@ -1,7 +1,4 @@
 const express = require('express')//Importation du package 'express'
-const app = express ()//Création application
-
-app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
 
 const dotenv = require('dotenv')//Importation du package 'dotenv'
 dotenv.config()
@@ -9,7 +6,8 @@ dotenv.config()
 const myUrlOfDataBase = process.env.URL_DATABASE//Chargement de la variable d'environnement 'URL_DATABASE' située dans le fichier '.env'
 const mongoose = require('mongoose')//Importation du package 'Mongoose'
 
-const userRoutes = require('./routes/user')//Importation route 'user'
+
+//const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'=>!!!!!!!!!A remettre en fonction!!!!!
 
 //Connection API à la base de données MongoDB
 mongoose.connect(myUrlOfDataBase,
@@ -20,6 +18,9 @@ mongoose.connect(myUrlOfDataBase,
     .catch(() => console.log('Connexion à MongoDB échouée !'))
 /****/
 
+const app = express()//Création application
+app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
+
 //Gestion du CORS (Cross Origin Resource Sharing) qui s'appliquera à toutes les routes
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')//Permission pour la communication entre serveurs d'origines différentes (exemples : localhost FrontEnd : 4200 vs localhost BackEnd : 3000)
@@ -29,25 +30,14 @@ app.use((req, res, next) => {
   });
 /****/
 
-app.use('api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 'signup'
-app.use((req, res, next) => {
-    console.log('Requête reçue !')
-    next()//Renvoi vers le prochain middleware (fonction)
-})
+const userRoutes = require('./routes/user')//Importation routes 'user'
+app.use('/api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 'signup'
+//app.use('/api/sauces', sauceRoutes)//Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce') =>!!!!!!!!!A remettre en fonction!!!!!
 
-app.use ((req, res, next) => {
-    res.status(200) //Code réponse 'requête réussie'
-    next()//Renvoi vers le prochain middleware (fonction)
-})
 
-app.use((req, res, next) => {
-    res.json({ message: 'Votre requête a bien été reçue !!!'})
-    next()//Renvoi vers le prochain middleware (fonction)
-})
-
-app.use((req, res) => {//Pas de méthode "next" car c'est le dernier middleware
-    console.log('Réponse envoyée avec succès !')
-})
+// app.use((req, res, next) => {
+//   console.log('Réponse envoyée avec succès !');
+// });
 
 module.exports = app //Accès de cet application aux autres fichiers notament le serveur Node
 

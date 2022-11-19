@@ -3,8 +3,8 @@ const uniqueValidator = require('mongoose-unique-validator')//Chargement du pack
 
 //Construction du schéma "user" pour Mongoose
 const userSchema = mongoose.Schema ({
-    email: {type: String, required: true, unique: true},//Adresse e-mail UNIQUE de l'utilisateur: champ requis
-    password: {type: String, required: true},//Mot de passe de l'utilisateur haché: champ requis
+    email: { type: String, required: true, unique: true },//Adresse e-mail UNIQUE de l'utilisateur: champ requis
+    password: { type: String, required: true },//Mot de passe de l'utilisateur haché: champ requis
 })
 /****/
 
