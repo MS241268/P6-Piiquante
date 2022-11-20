@@ -6,9 +6,6 @@ dotenv.config()
 const myUrlOfDataBase = process.env.URL_DATABASE//Chargement de la variable d'environnement 'URL_DATABASE' située dans le fichier '.env'
 const mongoose = require('mongoose')//Importation du package 'Mongoose'
 
-
-//const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'=>!!!!!!!!!A remettre en fonction!!!!!
-
 //Connection API à la base de données MongoDB
 mongoose.connect(myUrlOfDataBase,
     //{ useNewUrlParser: true,//Plus nécessaire depuis mongoose 6 par défaut à 'true'
@@ -30,14 +27,15 @@ app.use((req, res, next) => {
   });
 /****/
 
-const userRoutes = require('./routes/user')//Importation routes 'user'
+//Importation routes 'user'
+const userRoutes = require('./routes/user')
 app.use('/api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 'signup'
-//app.use('/api/sauces', sauceRoutes)//Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce') =>!!!!!!!!!A remettre en fonction!!!!!
+/****/
 
-
-// app.use((req, res, next) => {
-//   console.log('Réponse envoyée avec succès !');
-// });
+//Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce')
+const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'=>!!!!!!!!!A remettre en fonction!!!!!
+app.use('/api/sauces', sauceRoutes)
+/****/
 
 module.exports = app //Accès de cet application aux autres fichiers notament le serveur Node
 
