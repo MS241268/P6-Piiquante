@@ -33,8 +33,13 @@ app.use('/api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 
 /****/
 
 //Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce')
-const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'=>!!!!!!!!!A remettre en fonction!!!!!
+const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'
 app.use('/api/sauces', sauceRoutes)
+/****/
+
+//Importation de la route image
+const path = require('path')
+app.use('/images', express.static(path.join(__dirname, 'images')))
 /****/
 
 module.exports = app //Accès de cet application aux autres fichiers notament le serveur Node
