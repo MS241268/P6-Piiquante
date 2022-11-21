@@ -37,7 +37,7 @@ const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'
 app.use('/api/sauces', sauceRoutes)
 /****/
 
-//Importation de la route image
+//Importation de la route 'images'
 const path = require('path')
 app.use('/images', express.static(path.join(__dirname, 'images')))
 /****/
