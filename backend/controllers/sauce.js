@@ -1,4 +1,5 @@
 const Sauce = require("../models/Sauce")
+const fs = require('fs')
 
 //Visualisation de toutes les sauces
 exports.getAllSauces = (req, res, next) => {
@@ -47,7 +48,7 @@ exports.updateSauce = (req, res, next) => {
 	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => {
 			if (sauce.userId != req.auth.userId) {// Si l'utilisateur n'est pas celui qui a créé l'objet
-				res.status(401).json ({ meassage : `Vous n'êtes pas auhorisé à modifier l'objet !` })
+				res.status(401).json ({ meassage : 'Autorisation KO !' })
 			} else {
 				Sauce.updateOne ({ _id: req.params.id}, { ...sauceObject, _id: req.params.id })
 				.then(() => res.status(200).json({ message: 'Objet modifié !'}))
@@ -56,6 +57,28 @@ exports.updateSauce = (req, res, next) => {
 		})
 		.catch((error) => {
 			res.status(400).json({ error })
+		})
+}
+/****/
+
+//Suppression d'une sauce
+exports.deleteSauce = (req, res, next) => {
+	Sauce.findOne({ _id: req.params.id})//Récupération de l'objet dans la base de données
+		.then(sauce => {
+			if(sauce.userId != req.auth.userId) {//Vérification si l'utilisateur est propriétaire de l'objet
+				res.status(401).json({ message: 'Autorisation KO !' })
+			} else {
+				const filename = sauce.imageUrl.split('/images')[1]//Récupération du nom de fichier à supprimer
+				fs.unlink(`images/${filename}`, () => {
+					Sauce.deleteOne({ _id: req.params.id })
+						.then(() => {res.status(200).json({ message: 'Objet Supprimé !'})})
+						.catch(error => res.status(401).json({ error }))
+				})
+			}
+		})
+
+		.catch(error => {
+			res.status(500).json({ error })
 		})
 }
 /****/
