@@ -24,15 +24,15 @@ exports.login =(req, res, next) => {
     User.findOne({ email: req.body.email })//Recherche dans la dataBase de l'email fourni par l'utilisateur
     .then(user => {
         if (!user) {//Si utilisateur n'existe pas dans la dataBase
-            return res.satus(401).json({ message: 'Identifiant ou mot de passe incorrect' })//Message volontairement flou pour qu'aucune indication ne soit donnée sur l'existance ou non de l'utilisateur dans la dataBase (évite la fuite des données)
+            return res.status(401).json({ message: 'Identifiant ou mot de passe incorrect' })//Message volontairement flou pour qu'aucune indication ne soit donnée sur l'existance ou non de l'utilisateur dans la dataBase (évite la fuite des données)
         } 
-/****/
+        /****/
 
 //Si utilisateur existe dans la dataBase
         bcrypt.compare(req.body.password, user.password)//Comparaison du mdp fourni par l'utisateur et ceux de la dataBase
         .then(valid => {//Réponse de la dataBase
             if (!valid) {//Si mdp incorrect
-                return res.satus(401).json({ message: 'Identifiant ou mot de passe incorrect' })//Message volontairement flou pour qu'aucune indication ne soit donnée sur l'existance ou non de l'utilisateur dans la dataBase (évite la fuite des données)
+                return res.status(401).json({ message: 'Identifiant ou mot de passe incorrect' })//Message volontairement flou pour qu'aucune indication ne soit donnée sur l'existance ou non de l'utilisateur dans la dataBase (évite la fuite des données)
             }
 /****/
 
@@ -46,8 +46,8 @@ exports.login =(req, res, next) => {
                 )
             })
         })
-/****/
         .catch(error => res.status(500).json({ error }))//Erreur serveur
+/****/
     })
     .catch(error => res.status(500).json({ error }))//Erreur serveur
 }
