@@ -1,5 +1,5 @@
 const Sauce = require("../models/Sauce")
-const fs = require('fs')
+const fs = require('fs')//Importation du module 'fs' (file system) de NodeJS
 
 //Visualisation de toutes les sauces
 exports.getAllSauces = (req, res, next) => {
@@ -23,7 +23,7 @@ exports.createSauce = (req, res, next) => {
 		usersLiked: [' '],
 		usersDisliked: [' ']
 	})
-	sauce.save()
+	sauce.save()//Enregistrement dans la data base
 	.then(() => {res.status(201).json({ message: 'Objet enregistré !' })})
 	.catch(error => { res.status(400).json({ error })})
 }
@@ -39,25 +39,47 @@ exports.getOneSauce = (req, res, next) => {
 
 //Modification d'une sauce
 exports.updateSauce = (req, res, next) => {
-	const sauceObject = req.file ? {//Y a t il un fichier dans l'objet ?
-		...JSON.parse(req.body.sauce),//Si un fichier existe dans l'objet => transormation de la chaîne de cractères en objet
-		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-	} : { ...req.body }//Si pas de fichier récupération de l'objet
-
-	delete sauceObject._id//Suppression l'id de la requête (Sécurité : évite de créer un objet à son nom et eviter qu'il modifie l'objet et  le réassigne à un autre utilisateur)
-	Sauce.findOne({ _id: req.params.id })
+	Sauce.findOne({ _id: req.params.id })//Selection de l'objet dans la data base
 		.then((sauce) => {
-			if (sauce.userId != req.auth.userId) {// Si l'utilisateur n'est pas celui qui a créé l'objet
-				res.status(401).json ({ meassage : 'Autorisation KO !' })
+			//L'utilisateur est il le propriétaire de l'objet ?
+			if (sauce.userId != req.auth.userId) {// Si l'utilisateur n'est pas le propriétaire
+				res.status(401).json ({ message : 'Autorisation KO !' })
 			} else {
-				Sauce.updateOne ({ _id: req.params.id}, { ...sauceObject, _id: req.params.id })
-				.then(() => res.status(200).json({ message: 'Objet modifié !'}))
-				.catch(error => res.status(401).json({ error }))
-			}
-		})
-		.catch((error) => {
-			res.status(400).json({ error })
-		})
+				if (req.file) {// Si l'utilisateur est le propriétaire
+						Sauce.findOne({ _id: req.params.id })//Selection de l'objet dans la data base
+							.then((sauce) => {
+							//Récupération du nom de l'image à supprimer dans la data base
+							const filename = sauce.imageUrl.split('/images')[1]
+
+							//Suppression de l'image dans dossier 'images' du serveur
+							fs.unlink(`images/${filename}`, (error) => {
+								if(error) throw error
+							})
+						})
+							.catch((error) => res.status(404).json({ error}))
+				}
+
+	//Objet mis à jour dans la data base => 2 cas possibles : Le propriétaire modifie l'objet avec une nouvelle image OU modifie uniquement le 'formulaire' de la sauce
+	const sauceObject = req.file ? {//Y a t il une image dans l'objet ?
+		//Si une image existe dans l'objet modifié
+		...JSON.parse(req.body.sauce),// => transformation de la chaîne de caractères en objet JS
+		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`//Remplacement de l'image par la nouvelle
+	} : {
+		//Si aucune image n'est dans l'objet modifié
+		...req.body
+	}
+	//MàJ de la data base
+	delete sauceObject._id//Suppression l'id de la requête (Sécurité : évite de créer un objet à son nom et eviter qu'il modifie l'objet et le réassigne à un autre utilisateur)
+	Sauce.updateOne ({ _id: req.params.id}, { ...sauceObject, _id: req.params.id })
+		.then(() => {
+			res.status(200).json({ message: 'Objet modifié !'})})
+		.catch(error => res.status(404).json({ error }))
+					//})
+				}
+	})
+	.catch((error) => {
+		res.status(400).json({ error })
+	})
 }
 /****/
 
@@ -68,15 +90,14 @@ exports.deleteSauce = (req, res, next) => {
 			if(sauce.userId != req.auth.userId) {//Vérification si l'utilisateur est propriétaire de l'objet
 				res.status(401).json({ message: 'Autorisation KO !' })
 			} else {
-				const filename = sauce.imageUrl.split('/images')[1]//Récupération du nom de fichier à supprimer
-				fs.unlink(`images/${filename}`, () => {
+				const filename = sauce.imageUrl.split('/images')[1]//Récupération du nom de l'image à supprimer
+				fs.unlink(`images/${filename}`, () => {//suppression de l'image sur le serveur
 					Sauce.deleteOne({ _id: req.params.id })
 						.then(() => {res.status(200).json({ message: 'Objet Supprimé !'})})
 						.catch(error => res.status(401).json({ error }))
 				})
 			}
 		})
-
 		.catch(error => {
 			res.status(500).json({ error })
 		})
