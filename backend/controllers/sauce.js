@@ -114,7 +114,7 @@ exports.likeDislikeSauce = (req, res, next) => {
 				//MàJ dans la data base de l'objet
 				Sauce.updateOne(
 					{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-					{$inc: {likes : 1} ,//"$inc" opérateur MongoDB (incrémentation)
+					{$inc: {likes : 1} ,//"$inc" opérateur MongoDB (incrémentation : like +1)
 					 $push: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (mise de l'utilisateur qui like dans le tableau "usersLiked")
 				)
 					.then(() => res.status(201).json( { message: "sauce like +1"} ))
@@ -130,8 +130,8 @@ exports.likeDislikeSauce = (req, res, next) => {
 				//MàJ dans la data base de l'objet
 				Sauce.updateOne(
 					{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-					{$inc: {likes : -1} ,//"$inc" opérateur MongoDB (incrémentation)
-					$pull: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (mise de l'utilisateur qui like dans le tableau "usersLiked")
+					{$inc: {likes : -1} ,//"$inc" opérateur MongoDB (décrémentation : like -1)
+					$pull: {usersLiked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l'utilisateur qui supprime son like dans le tableau "usersLiked")
 				)
 					.then(() => res.status(201).json( { message: "sauce like 0"} ))
 
