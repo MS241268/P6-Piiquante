@@ -20,8 +20,8 @@ exports.createSauce = (req, res, next) => {
 		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,//Chemin où sera située l'image dans le backend
 		likes: 0,
 		dislikes: 0,
-		usersLiked: [' '],
-		usersDisliked: [' ']
+		usersLiked: [],
+		usersDisliked: []
 	})
 	sauce.save()//Enregistrement dans la data base
 	.then(() => {res.status(201).json({ message: 'Objet enregistré !' })})
@@ -85,7 +85,7 @@ exports.updateSauce = (req, res, next) => {
 
 //Suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
-	Sauce.findOne({ _id: req.params.id})//Récupération de l'objet dans la base de données
+	Sauce.findOne({ _id: req.params.id})//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
 		.then(sauce => {
 			if(sauce.userId != req.auth.userId) {//Vérification si l'utilisateur est propriétaire de l'objet
 				res.status(401).json({ message: 'Autorisation KO !' })
@@ -103,3 +103,47 @@ exports.deleteSauce = (req, res, next) => {
 		})
 }
 /****/
+
+exports.likeDislikeSauce = (req, res, next) => {
+	Sauce.findOne({ _id: req.params.id })//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+		.then((sauce) => {
+			
+			//L'utilisateur like 1 sauce like +1
+			if(!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1){//Si l'utilisateur n'est pas dans le tableau 'userLiked' ET qu'il like l'objet
+			
+				//MàJ dans la data base de l'objet
+				Sauce.updateOne(
+					{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+					{$inc: {likes : 1} ,//"$inc" opérateur MongoDB (incrémentation)
+					 $push: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (mise de l'utilisateur qui like dans le tableau "usersLiked")
+				)
+					.then(() => res.status(201).json( { message: "sauce like +1"} ))
+
+					.catch((error) => res.status(400).json({ error }))
+					
+			}
+			/****/
+
+			//like = 0 (likes = 0, n'a pas voté)
+			if(sauce.usersLiked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est pas dans le tableau 'userLiked' ET qu'il ne vote pas pour l'objet
+
+				//MàJ dans la data base de l'objet
+				Sauce.updateOne(
+					{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+					{$inc: {likes : -1} ,//"$inc" opérateur MongoDB (incrémentation)
+					$pull: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (mise de l'utilisateur qui like dans le tableau "usersLiked")
+				)
+					.then(() => res.status(201).json( { message: "sauce like 0"} ))
+
+					.catch((error) => res.status(400).json({ error }))	
+			}
+			/****/
+		})
+		.catch((error) => res.status(404).json({ error }))
+	
+	
+
+	//like = -1 (dislikes = +1)
+
+	//like = 0 (dislikes = 0)
+}

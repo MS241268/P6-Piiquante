@@ -9,10 +9,10 @@ const sauceSchema = mongoose.Schema ({
     mainPepper: {type: String, required: true},//Principal ingrédient épicé de la sauce: champ requis
     imageUrl: {type: String, required: true},//URL de l'image de la sauce téléchargée par l'utilisateur: champ requis
     heat: {type: Number, required: true},//Nombre entre 1 et 10 décrivant la sauce: champ requis
-    likes: {type: Number, required: true},//Nombre d'utilisateurs qui aiment (= likent) la sauce: champ requis
-    dislikes: {type: Number, required: true},//Nombre d'utilisateurs qui n'aiment pas (= dislike) la sauce: champ requis
-    usersLiked: {type: ['String <userId>'], required: true}, //Tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce: champ requis
-    usersDisliked: {type: ['String <userId>'], required: true},//Tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce: champ requis
+    likes: {type: Number, required: true},//L'utilisateur aime (= like) la sauce: champ requis
+    dislikes: {type: Number, required: true},//L'utilisateur n'aime pas (= dislike) la sauce: champ requis
+    usersLiked: {type: [String], required: true}, //Tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce: champ requis
+    usersDisliked: {type: [String], required: true},//Tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce: champ requis
 })
 /****/
 
