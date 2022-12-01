@@ -3,7 +3,8 @@ const express = require('express')//Importation du package 'express'
 const dotenv = require('dotenv')//Importation du package 'dotenv'
 dotenv.config()
 
-const myUrlOfDataBase = process.env.URL_DATABASE//Chargement de la variable d'environnement 'URL_DATABASE' située dans le fichier '.env'
+const myUrlOfDataBase = `mongodb+srv://${process.env.USER_DATABASE}:${process.env.PASSWORD_DATABASE}@${process.env.SERVER_DATABASE}/?retryWrites=true&w=majority`
+
 const mongoose = require('mongoose')//Importation du package 'Mongoose'
 
 //Connection API à la base de données MongoDB

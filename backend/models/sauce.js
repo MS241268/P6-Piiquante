@@ -11,8 +11,8 @@ const sauceSchema = mongoose.Schema ({
     heat: {type: Number, required: true},//Nombre entre 1 et 10 décrivant la sauce: champ requis
     likes: {type: Number, required: true},//Total des 'userId' qui ont liké
     dislikes: {type: Number, required: true},//Total des 'userId' qui ont disliké
-    usersLiked: {type: [String]/*, required: true*/}, //Référencement des 'userId' qui ont liké
-    usersDisliked: {type: [String]/*, required: true*/},//Référencement des 'userId' qui ont disliké
+    usersLiked: {type: [String]}, //Référencement des 'userId' qui ont liké
+    usersDisliked: {type: [String]},//Référencement des 'userId' qui ont disliké
 })
 /****/
 
