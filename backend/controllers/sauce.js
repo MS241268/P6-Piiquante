@@ -104,70 +104,76 @@ exports.deleteSauce = (req, res, next) => {
 /****/
 
 exports.likeDislikeSauce = (req, res, next) => {
-			Sauce.findOne({ _id: req.params.id })//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-				.then((sauce) => {
-					console.log(sauce)
-					//L'utilisateur like
-					if(!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1){//Si l'utilisateur n'est pas dans le tableau 'userLiked' ET qu'il like l'objet
-					
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-							{$inc: {likes : 1} ,//"$inc" opérateur MongoDB (incrémentation du total de likes de +1 )
-							$push: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (Référencement de l''userId' qui a liké dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : ajout du like !"} ))
+	Sauce.findOne({ userId: req.body.userId })//l'utilisateur qui like est il dans la data base ?
+		.then((userId) => {
+			if(!userId) {//l'utilisateur qui like n'est pas dans la data base
+				return res.status(404).json({ message: 'Non trouvé' })
+			} else {//l'utilisateur qui like est dans la data base
+				Sauce.findOne({ _id: req.params.id })//Récupération de l'objet dans la base de données et mise en forme de la clé 
+					.then((sauce) => {
 
-							.catch((error) => res.status(400).json({ error }))
-							
-					}
-					/****/
+						//L'utilisateur like
+						if(!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1){//Si l'utilisateur n'est pas dans le tableau 'userLiked' ET qu'il like l'objet
+						
+							//MàJ dans la data base de l'objet
+							Sauce.updateOne(
+								{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+								{$inc: {likes : 1} ,//"$inc" opérateur MongoDB (incrémentation du total de likes de +1 )
+								$push: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (Référencement de l''userId' qui a liké dans le tableau "usersLiked")
+							)
+								.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : ajout du like !"} ))
 
-					//L'utilisateur annule son like 
-					if(sauce.usersLiked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est dans le tableau 'userLiked' ET annule son like sur l'objet
+								.catch((error) => res.status(400).json({ error }))
+						}
+						/****/
 
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-							{$inc: {likes : -1} ,//"$inc" opérateur MongoDB (décrémentation du total de likes de -1)
-							$pull: {usersLiked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l''userId' qui annule son like dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : annulation du like !"} ))
+						//L'utilisateur annule son like 
+						if(sauce.usersLiked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est dans le tableau 'userLiked' ET annule son like sur l'objet
 
-							.catch((error) => res.status(400).json({ error }))	
-					}
-					/****/
+							//MàJ dans la data base de l'objet
+							Sauce.updateOne(
+								{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+								{$inc: {likes : -1} ,//"$inc" opérateur MongoDB (décrémentation du total de likes de -1)
+								$pull: {usersLiked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l''userId' qui annule son like dans le tableau "usersLiked")
+							)
+								.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : annulation du like !"} ))
 
-					//L'utilisateur dislike
-					if(!sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1){//Si l'utilisateur n'est pas dans le tableau 'userDisliked' ET qu'il dislike l'objet
-					
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-							{$inc: {dislikes : 1} ,//"$inc" opérateur MongoDB (incrémentation du total de dislikes de +1 )
-							$push: {usersDisliked : req.body.userId}},//"$push" opérateur MongoDB (Référencement de l''userId' qui a disliké dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : ajout du dislike !"} ))
+								.catch((error) => res.status(400).json({ error }))	
+						}
+						/****/
 
-							.catch((error) => res.status(400).json({ error }))
-							
-					}
-					/****/
+						//L'utilisateur dislike
+						if(!sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1){//Si l'utilisateur n'est pas dans le tableau 'userDisliked' ET qu'il dislike l'objet
+						
+							//MàJ dans la data base de l'objet
+							Sauce.updateOne(
+								{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+								{$inc: {dislikes : 1} ,//"$inc" opérateur MongoDB (incrémentation du total de dislikes de +1 )
+								$push: {usersDisliked : req.body.userId}},//"$push" opérateur MongoDB (Référencement de l''userId' qui a disliké dans le tableau "usersLiked")
+							)
+								.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : ajout du dislike !"} ))
 
-					//L'utilisateur annule son dislike 
-					if(sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est dans le tableau 'userDisliked' ET annule son dislike sur l'objet
+								.catch((error) => res.status(400).json({ error }))
+								
+						}
+						/****/
 
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-							{$inc: {dislikes : -1} ,//"$inc" opérateur MongoDB (décrémentation du total de dislikes de -1)
-							$pull: {usersDisliked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l''userId' qui annule son dislike dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : annulation du dislike !"} ))
+						//L'utilisateur annule son dislike 
+						if(sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est dans le tableau 'userDisliked' ET annule son dislike sur l'objet
 
-							.catch((error) => res.status(400).json({ error }))	
-					}
-					/****/
-				})
-				.catch((error) => res.status(404).json({ error }))
+							//MàJ dans la data base de l'objet
+							Sauce.updateOne(
+								{ _id : req.params.id },//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
+								{$inc: {dislikes : -1} ,//"$inc" opérateur MongoDB (décrémentation du total de dislikes de -1)
+								$pull: {usersDisliked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l''userId' qui annule son dislike dans le tableau "usersLiked")
+							)
+								.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : annulation du dislike !"} ))
+
+								.catch((error) => res.status(400).json({ error }))	
+						}
+						/****/
+					})
+					.catch((error) => res.status(404).json({ error }))
+			}})
+		.catch((error) => res.status(500).json({ error }))	
 }
