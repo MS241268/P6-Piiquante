@@ -1,4 +1,5 @@
 const express = require('express')//Importation du package 'express'
+const helmet = require('helmet')//Importation du package 'helmet'
 
 const dotenv = require('dotenv')//Importation du package 'dotenv'
 dotenv.config()
@@ -18,6 +19,8 @@ mongoose.connect(myUrlOfDataBase,
 
 const app = express()//Création application
 app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
+
+app.use(helmet.frameguard({ action: "SAMEORIGIN" }))
 
 //Gestion du CORS (Cross Origin Resource Sharing) qui s'appliquera à toutes les routes
 app.use((req, res, next) => {
