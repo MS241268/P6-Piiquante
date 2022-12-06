@@ -20,7 +20,21 @@ mongoose.connect(myUrlOfDataBase,
 const app = express()//Création application
 app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
 
+//Helmet
+//app.use(helmet())
 app.use(helmet.frameguard({ action: "SAMEORIGIN" }))
+/****/
+
+//Express-rate-limit
+const rateLimit = require(`express-rate-limit`)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limite de 100 requêtes par Ip pendant 15 mn sur la fenêtre en cours
+	standardHeaders: true, // Retour info limite atteinte dans l'en-tête 'RateLimit-*'
+	legacyHeaders: false, // Désactivation de l'en-tête 'X-RateLimit-*'
+})
+app.use(limiter)
+/****/
 
 //Gestion du CORS (Cross Origin Resource Sharing) qui s'appliquera à toutes les routes
 app.use((req, res, next) => {

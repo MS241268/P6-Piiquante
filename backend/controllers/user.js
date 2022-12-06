@@ -1,22 +1,26 @@
 const bcrypt = require ('bcrypt')//Importation package 'bcrypt'
 const jwt = require ('jsonwebtoken')//Importation du package 'jsonwebtoken'
-
 const User = require('../models/User')
+const validator = require(`validator`)
 
 //Inscription d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)//Hashage du mdp utilisateur en 10 tours d'algorythme bcrypt
-        .then(hash => {
-            const user = new User({
-                email: req.body.email,
-                password: hash
+    const isMailOk = validator.isEmail(req.body.email)
+    if(!isMailOk) {
+        res.status(400).json({ message: `Email non conforme !`})
+    } else {
+        bcrypt.hash(req.body.password, 10)//Hashage du mdp utilisateur en 10 tours d'algorythme bcrypt
+            .then(hash => {
+                const user = new User({
+                    email: req.body.email,
+                    password: hash
+                })
+                user.save()
+                    .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+                    .catch(error => res.status (400).json({ error }))
             })
-            user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status (400).json({ error }))
-        })
-        .catch(error => res.status (500).json({ error }))//Erreur serveur
-}
+            .catch(error => res.status (500).json({ error }))//Erreur serveur
+}}
 /****/
 
 //Connexion utilisateur existant
