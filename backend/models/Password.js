@@ -1,4 +1,4 @@
-const passwordValidator = require ('password-validator')
+const passwordValidator = require ('password-validator')//Importation du package 'password-validator'
 
 const passwordSchema = new passwordValidator()
 

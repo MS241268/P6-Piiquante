@@ -1,7 +1,7 @@
 const bcrypt = require ('bcrypt')//Importation package 'bcrypt'
 const jwt = require ('jsonwebtoken')//Importation du package 'jsonwebtoken'
 const User = require('../models/User')
-const validator = require(`validator`)
+const validator = require(`validator`)//Importation du package 'validator'
 
 //Inscription d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
