@@ -104,11 +104,17 @@ exports.deleteSauce = (req, res, next) => {
 /****/
 
 exports.likeDislikeSauce = (req, res, next) => {
-	User.findOne({ _id: req.body.userId })//l'utilisateur qui like est il dans la data base 'user' ?
-		.then((userId) => {
-			if(!userId) {//l'utilisateur qui like n'est pas dans la data base 'user'
-				return res.status(404).json({ message: 'Non trouvé !' })
-			} else {//l'utilisateur qui like est dans la data base 'user'
+	console.log (req.body.userId, req.auth.userId)
+		if (req.body.userId !== req.auth.userId){//L'utilisateur ne correspond pas à l'utilisateur fourni par le token
+				return res.status(401).json({ message: 'Non autorisé !' })
+		// 	// }
+	// User.findOne({ _id: req.body.userId })//l'utilisateur est il dans la data base 'user' ?
+
+	// 	.then((userId) => {
+	// 		console.log(userId)
+	// 		if(!userId /*|| req.params.id != req.auth.userId*/ ) {//l'utilisateur n'est pas dans la data base 'user'
+	// 			return res.status(404).json({ message: 'Non trouvé !' })
+			} else {//L'utilisateur correspond à l'utilisateur fourni par le token
 				Sauce.findOne({ _id: req.params.id })//Récupération de l'objet dans la base de données et mise en forme de la clé 
 					.then((sauce) => {
 
@@ -174,6 +180,6 @@ exports.likeDislikeSauce = (req, res, next) => {
 						/****/
 					})
 					.catch((error) => res.status(404).json({ error }))
-			}})
-		.catch((error) => res.status(500).json({ error }))	
+			}/*})*/
+		// .catch((error) => res.status(500).json({ error }))	
 }

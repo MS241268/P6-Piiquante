@@ -21,14 +21,14 @@ const app = express()//Création application
 app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
 
 //Helmet
-//app.use(helmet())
-app.use(helmet.frameguard({ action: "SAMEORIGIN" }))
+// app.use(helmet())
+// app.use(helmet.frameguard({ action: "SAMEORIGIN" }))
 /****/
 
 //Express-rate-limit
 const rateLimit = require(`express-rate-limit`)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000, // 15 minutes (conversion ms en mn)
 	max: 100, // Limite de 100 requêtes par Ip pendant 15 mn sur la fenêtre en cours
 	standardHeaders: true, // Retour info limite atteinte dans l'en-tête 'RateLimit-*'
 	legacyHeaders: false, // Désactivation de l'en-tête 'X-RateLimit-*'
@@ -44,6 +44,10 @@ app.use((req, res, next) => {
     next()
   });
 /****/
+// app.use(helmet())
+// app.use(helmet.hidePoweredBy())
+// app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"})) 
+
 
 //Importation routes 'user'
 const userRoutes = require('./routes/user')
