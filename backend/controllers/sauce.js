@@ -73,7 +73,6 @@ exports.updateSauce = (req, res, next) => {
 		.then(() => {
 			res.status(200).json({ message: 'Objet modifié !'})})
 		.catch(error => res.status(404).json({ error }))
-					//})
 				}
 	})
 	.catch((error) => {
