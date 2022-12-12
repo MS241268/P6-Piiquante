@@ -45,7 +45,6 @@ app.use((req, res, next) => {
   });
 /****/
 app.use(helmet())
-//app.use(helmet.hidePoweredBy())
 app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"})) 
 
 app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
