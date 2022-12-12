@@ -1,29 +1,28 @@
 const express = require('express')//Importation du package 'express'
 const helmet = require('helmet')//Importation du package 'helmet'
+const mongoose = require('mongoose')//Importation du package 'Mongoose'
 
 const dotenv = require('dotenv')//Importation du package 'dotenv'
 dotenv.config()
 
+const path = require('path')
+const userRoutes = require('./routes/user')
+const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'
+
 const myUrlOfDataBase = `mongodb+srv://${process.env.USER_DATABASE}:${process.env.PASSWORD_DATABASE}@${process.env.SERVER_DATABASE}/?retryWrites=true&w=majority`
 
-const mongoose = require('mongoose')//Importation du package 'Mongoose'
+
 
 //Connection API à la base de données MongoDB
 mongoose.connect(myUrlOfDataBase,
-    //{ useNewUrlParser: true,//Plus nécessaire depuis mongoose 6 par défaut à 'true'
-    //useUnifiedTopology: true }//Plus nécessaire depuis mongoose 6 par défaut à 'true'
+    { useNewUrlParser: true,//Plus nécessaire depuis mongoose 6 par défaut à 'true'
+    useUnifiedTopology: true }//Plus nécessaire depuis mongoose 6 par défaut à 'true'
     )
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'))
 /****/
 
 const app = express()//Création application
-app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
-
-//Helmet
-// app.use(helmet())
-// app.use(helmet.frameguard({ action: "SAMEORIGIN" }))
-/****/
 
 //Express-rate-limit
 const rateLimit = require(`express-rate-limit`)
@@ -36,6 +35,7 @@ const limiter = rateLimit({
 app.use(limiter)
 /****/
 
+
 //Gestion du CORS (Cross Origin Resource Sharing) qui s'appliquera à toutes les routes
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')//Permission pour la communication entre serveurs d'origines différentes (exemples : localhost FrontEnd : 4200 vs localhost BackEnd : 3000)
@@ -44,24 +44,22 @@ app.use((req, res, next) => {
     next()
   });
 /****/
-// app.use(helmet())
-// app.use(helmet.hidePoweredBy())
-// app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"})) 
+app.use(helmet())
+//app.use(helmet.hidePoweredBy())
+app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"})) 
 
+app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
+
+//Importation de la route 'images'
+app.use('/images', express.static(path.join(__dirname, 'images')))
+/****/
 
 //Importation routes 'user'
-const userRoutes = require('./routes/user')
 app.use('/api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 'signup'
 /****/
 
 //Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce')
-const sauceRoutes = require('./routes/sauce')//Importation routes 'sauce'
 app.use('/api/sauces', sauceRoutes)
-/****/
-
-//Importation de la route 'images'
-const path = require('path')
-app.use('/images', express.static(path.join(__dirname, 'images')))
 /****/
 
 module.exports = app //Accès de cet application aux autres fichiers notament le serveur Node
