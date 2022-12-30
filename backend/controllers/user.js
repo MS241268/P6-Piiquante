@@ -38,9 +38,9 @@ exports.login =(req, res, next) => {
 //Si utilisateur existant et mdp Ok
             res.status(200).json({//Réponse ok du serveur
                 userId: user._id,
-                token: jwt.sign(//Founiture d'un token et cryptage de l' userId et du mdp
-                    { userId: user._id },
-                    process.env.DECRYPT_KEY,//Clef secrète pour l'encodage
+                token: jwt.sign(//Founiture d'un token
+                    { userId: user._id },//cryptage de l' userId (payload)
+                    process.env.DECRYPT_KEY,//Clef secrète pour l'encodage du userId
                     { expiresIn: '24h' }
                 )
             })

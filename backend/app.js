@@ -28,7 +28,7 @@ const app = express()//Création application
 const rateLimit = require(`express-rate-limit`)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes (conversion ms en mn)
-	max: 100, // Limite de 100 requêtes par Ip pendant 15 mn sur la fenêtre en cours
+	max: 3, // Limite de 100 requêtes par Ip pendant 15 mn sur la fenêtre en cours
 	standardHeaders: true, // Retour info limite atteinte dans l'en-tête 'RateLimit-*'
 	legacyHeaders: false, // Désactivation de l'en-tête 'X-RateLimit-*'
 })
@@ -44,8 +44,11 @@ app.use((req, res, next) => {
     next()
   });
 /****/
+
+//Helmet
 app.use(helmet())
-app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"})) 
+app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"}))//Autorisation des routes d'origine différente y compris la route statique pour la gestion des images
+/****/
 
 app.use(express.json())//Accès au corps de la requête POST si celui-ci est au format JSON
 
@@ -53,12 +56,12 @@ app.use(express.json())//Accès au corps de la requête POST si celui-ci est au 
 app.use('/images', express.static(path.join(__dirname, 'images')))
 /****/
 
-//Importation routes 'user'
+//Enregistrement du routeur 'user'
 app.use('/api/auth', userRoutes)//Importation des routes utilisateurs 'login' & 'signup'
 /****/
 
-//Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce')
-app.use('/api/sauces', sauceRoutes)
+//Enregistrement du routeur 'sauce' 
+app.use('/api/sauces', sauceRoutes)//Importation de toutes les routes sauce ('getAllSauces'/'getOneSauce'/'createSauce'/'updateSauce'/'deleteSauce'/'likeDislikeSauce')
 /****/
 
 module.exports = app //Accès de cet application aux autres fichiers notament le serveur Node

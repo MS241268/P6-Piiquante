@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')//Chargement du package pour 
+const uniqueValidator = require('mongoose-unique-validator')//Chargement du package pour email unique => Evite d'avoir plusieurs user avec même adresse mail
 
 //Construction du schéma "user" pour Mongoose
 const userSchema = mongoose.Schema ({
@@ -8,5 +8,5 @@ const userSchema = mongoose.Schema ({
 })
 /****/
 
-userSchema.plugin(uniqueValidator)//Email unique
+userSchema.plugin(uniqueValidator)//Validateur 'Email unique' appliqué au schéma  avant d'en faire un modèle
 module.exports = mongoose.model('User', userSchema)//Export du schéma 'user' en tant que modèle Mongoose pour l'exploiter dans MongoDB
