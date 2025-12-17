@@ -60,6 +60,11 @@ app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' })); //Autoris
 
 app.use(express.json()); //Accès au corps de la requête POST si celui-ci est au format JSON
 
+// 🔹 ROUTE PING (AVANT TOUT)
+app.get('/ping', (req, res) => {
+  res.status(200).send('OK');
+});
+
 //Importation de la route 'images'
 app.use('/images', express.static(path.join(__dirname, 'images')));
 /****/
