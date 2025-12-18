@@ -9,6 +9,15 @@ const path = require('path');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce'); //Importation routes 'sauce'
 
+const fs = require('fs');
+
+// 🔹 Création du dossier images si il n'existe pas
+const imagesDir = path.join(__dirname, 'images');
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir);
+  console.log('Dossier images créé automatiquement');
+}
+
 const myUrlOfDataBase = `mongodb+srv://${process.env.USER_DATABASE}:${process.env.PASSWORD_DATABASE}@${process.env.SERVER_DATABASE}/?retryWrites=true&w=majority`;
 
 //Connection API à la base de données MongoDB
