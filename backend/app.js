@@ -18,7 +18,7 @@ if (!fs.existsSync(imagesDir)) {
   console.log('Dossier images créé automatiquement');
 }
 
-const myUrlOfDataBase = `mongodb+srv://${process.env.USER_DATABASE}:${process.env.PASSWORD_DATABASE}@${process.env.SERVER_DATABASE}/?retryWrites=true&w=majority`;
+const myUrlOfDataBase = `mongodb+srv://${process.env.USER_DATABASE}:${process.env.PASSWORD_DATABASE}@${process.env.SERVER_DATABASE}/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
 
 //Connection API à la base de données MongoDB
 mongoose.set('strictQuery', true),
