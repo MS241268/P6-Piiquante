@@ -1,32 +1,167 @@
-.sauce-list {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+/* ========================= */
+/*  CONTENEUR GLOBAL (écrans larges) */
+/* ========================= */
+.page-container {
+  max-width: 1400px; /* limite écrans 17" / iMac */
+  margin: auto;
+  padding: 0 20px;
 }
 
+/* ========================= */
+/* GRID PRINCIPALE */
+/* ========================= */
+.sauce-list {
+  display: grid;
+  gap: 20px;
+  justify-items: center; /*  centre les cartes dans chaque colonne */
+}
+
+/* ========================= */
+/* ITEMS */
+/* ========================= */
 .sauce-list-item {
+  width: 100%;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   text-align: center;
-  width: 220px;
+  background-color: #b5e6a2;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  padding: 25px 10px;
+  height: 380px;
+
   img {
-    max-width: 200px;
-    max-height: 250px;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
   }
+
   h4 {
-    margin: 0;
+    color: #616263;
+    font-size: 1.2rem;
+    margin: 0.8rem 0;
     font-weight: 500;
   }
+
   p {
+    color: #616263;
+    font-size: 1rem;
     margin: 0;
   }
-  transition: all 0.1s ease-in-out;
-  cursor: pointer;
+
   &:hover {
     transform: scale(1.05);
     box-shadow: 1px 1px 20px rgba(120, 120, 120, 0.3);
   }
 }
 
+/* ========================= */
+/* TITRE */
+/* ========================= */
 .list-title {
   text-align: center;
-  margin: 2em auto;
+  margin: 1em auto;
+  font-size: 1.7rem;
+  color: #b5e6a2;
+  font-weight: bold;
+}
+
+/* ================================================= */
+/* 📱 MOBILE portrait + paysage → 1 COLONNE */
+/* ================================================= */
+@media (max-width: 767px) {
+  .sauce-list {
+    grid-template-columns: 1fr; /*  1 colonne forcée */
+  }
+
+  .sauce-list-item {
+    max-width: 320px;
+    height: 280px;
+  }
+
+  .sauce-list-item img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .sauce-list-item h4 {
+    font-size: 0.95rem;
+  }
+
+  .sauce-list-item p {
+    font-size: 0.85rem;
+  }
+
+  .list-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* ================================================= */
+/* 📱 TABLETTE PORTRAIT → 2 COLONNES */
+/* ================================================= */
+@media (min-width: 768px) and (max-width: 991px) {
+  .sauce-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sauce-list-item {
+    max-width: 260px;
+    height: 340px;
+  }
+
+  .sauce-list-item img {
+    width: 180px;
+    height: 180px;
+  }
+
+  .sauce-list-item h4 {
+    font-size: 1.1rem;
+  }
+
+  .sauce-list-item p {
+    font-size: 0.95rem;
+  }
+
+  .list-title {
+    font-size: 2.2rem;
+  }
+}
+
+/* ================================================= */
+/* 📱 TABLETTE PAYSAGE → 3 COLONNES */
+/* ================================================= */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .sauce-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sauce-list-item {
+    max-width: 260px;
+    height: 360px;
+  }
+
+  .list-title {
+    font-size: 2.5rem;
+  }
+}
+
+/* ================================================= */
+/* 🖥 PC → 5 COLONNES FIXES */
+/* ================================================= */
+@media (min-width: 1200px) {
+  .sauce-list {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .sauce-list-item {
+    max-width: 260px;
+    height: 380px;
+  }
 }

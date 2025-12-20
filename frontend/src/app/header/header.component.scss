@@ -1,24 +1,29 @@
 nav {
   box-sizing: border-box;
-  width: 100%;
-  max-width: 1400px;
+  width: 95%;
+  background-color: lightslategray;
+  // max-width: 1400px;
+  border-radius: 15px;
   margin: auto;
+  margin-top: 20px;
   position: relative;
   top: 0;
   left: 0;
   display: flex;
   padding: 20px;
   justify-content: space-between;
-  border-bottom: thin solid black;
+  // border-bottom: thin solid black;
 }
 
 h1 {
+  color: #b5e6a2;
   font-weight: 700;
   font-size: 2.4em;
   margin: 0;
 }
 
 h5 {
+  color: #b5e6a2;
   font-size: 1.2em;
   font-weight: 400;
   margin: 0;
@@ -40,7 +45,9 @@ h5 {
   margin-right: 1em;
 }
 
-.left-nav, .right-nav {
+.left-nav,
+.right-nav {
+  color: #b5e6a2;
   align-self: center;
   width: 30%;
 }
@@ -63,7 +70,7 @@ li {
 }
 
 a {
-  color: black;
+  color: #b5e6a2;
   font-weight: 400;
   text-decoration: none;
   cursor: pointer;
@@ -75,4 +82,103 @@ a {
 .active {
   font-weight: 700;
   text-decoration: underline;
+}
+/* --- Media Queries --- */
+/* Mobile portrait */
+@media (max-width: 720px) {
+  nav {
+    flex-direction: column;
+    padding: 15px;
+
+    .logo {
+      order: 1;
+      justify-content: center;
+      margin-bottom: 6px;
+
+      .logo-image img {
+        height: 3em;
+      }
+    }
+
+    .left-nav {
+      order: 2;
+      width: 100%;
+
+      ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      li {
+        margin: 8px 0;
+      }
+    }
+
+    .right-nav {
+      order: 3;
+      width: 100%;
+      ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0; // ← espace à 0
+      }
+
+      li {
+        margin: 0; // ← supprime les marges parasites
+      }
+    }
+  }
+}
+/* Mobile landscape */
+@media (min-width: 721px) and (max-width: 768px) {
+  nav {
+    flex-direction: row;
+    padding: 15px;
+
+    .logo {
+      .logo-image img {
+        height: 3.5em;
+      }
+    }
+
+    .left-nav,
+    .right-nav {
+      width: 45%;
+
+      ul {
+        justify-content: space-around;
+      }
+    }
+
+    .right-nav ul {
+      justify-content: flex-end;
+    }
+  }
+}
+/* Tablette */
+@media (min-width: 769px) and (max-width: 1024px) {
+  nav {
+    flex-direction: row;
+    padding: 20px;
+
+    .logo {
+      .logo-image img {
+        height: 4em;
+      }
+    }
+
+    .left-nav,
+    .right-nav {
+      width: 40%;
+
+      ul {
+        justify-content: space-around;
+      }
+    }
+
+    .right-nav ul {
+      justify-content: flex-end;
+    }
+  }
 }

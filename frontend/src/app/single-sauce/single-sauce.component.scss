@@ -1,12 +1,15 @@
 .sauce-container {
   display: flex;
   img {
+    max-width: 45%;
     max-height: 70vh;
+    border-radius: 15px;
     flex: 1;
   }
 }
 
 .sauce-info {
+  color: #b5e6a2;
   padding: 40px 20px;
   flex: 1;
 }
@@ -27,7 +30,8 @@
   }
 }
 
-.likes, .dislikes {
+.likes,
+.dislikes {
   margin: 0 0.4em;
 }
 
@@ -63,5 +67,98 @@
 .control-buttons {
   button {
     margin: 1em 1em 0 0;
+  }
+}
+/* ============================= */
+/* 📱 Mobile ≤ 720px */
+/* ============================= */
+@media (max-width: 720px) {
+  .sauce-container {
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      max-width: 100%;
+      max-height: 40vh;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .sauce-info {
+    padding: 20px 10px;
+    text-align: center;
+  }
+
+  .like-buttons {
+    justify-content: center;
+  }
+
+  .control-buttons {
+    display: flex;
+    flex-direction: column;
+
+    button {
+      margin: 0.5em 0;
+      width: 100%;
+    }
+  }
+}
+@media (min-width: 721px) and (max-width: 767px) {
+  .sauce-container {
+    flex-wrap: wrap;
+    justify-content: center; // centre horizontalement
+    align-items: center; // centre verticalement
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 40vh;
+    margin-bottom: 1rem;
+  }
+
+  .sauce-info {
+    width: 100%;
+    text-align: center;
+  }
+}
+/* ============================= */
+/* 📱 Tablette 768px → 1024px */
+/* ============================= */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sauce-container {
+    flex-direction: row;
+
+    img {
+      max-width: 40%;
+      max-height: 55vh;
+    }
+  }
+
+  .sauce-info {
+    padding: 30px 20px;
+  }
+
+  .control-buttons {
+    button {
+      margin: 0.8em 0.8em 0 0;
+    }
+  }
+}
+
+/* ============================= */
+/* 🖥 Desktop > 1024px */
+/* ============================= */
+@media (min-width: 1025px) {
+  .sauce-container {
+    flex-direction: row;
+
+    img {
+      max-width: 45%;
+      max-height: 70vh;
+    }
+  }
+
+  .sauce-info {
+    padding: 40px 20px;
   }
 }
