@@ -151,11 +151,15 @@
     font-size: 2.5rem;
   }
 }
-
+@media (min-width: 992px) and (orientation: landscape) and (pointer: coarse) {
+  .sauce-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 /* ================================================= */
 /* 🖥 PC → 5 COLONNES FIXES */
 /* ================================================= */
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (pointer: fine) {
   .sauce-list {
     grid-template-columns: repeat(5, 1fr);
   }
