@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     const folder =
       process.env.NODE_ENV === 'production' ? 'images_prod' : 'images';
-    callback(null, path.join(__dirname, folder));
+    callback(null, path.join(__dirname, '..', folder));
   },
   filename: (req, file, callback) => {
     const name = file.originalname.split(' ').join('_'); //Renommage du fichier en remplaçant ' ' par '_'
