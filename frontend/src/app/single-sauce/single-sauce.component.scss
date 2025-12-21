@@ -1,15 +1,19 @@
 .sauce-container {
   display: flex;
+  overflow-wrap: break-word;
   img {
     max-width: 45%;
     max-height: 70vh;
     border-radius: 15px;
     flex: 1;
   }
+  p {
+    width: 68%;
+  }
 }
 
 .sauce-info {
-  color: #b5e6a2;
+  color: #00d0f9;
   padding: 40px 20px;
   flex: 1;
 }
