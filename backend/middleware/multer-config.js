@@ -1,5 +1,5 @@
 const multer = require('multer'); //Importation multer
-
+const path = require('path');
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
