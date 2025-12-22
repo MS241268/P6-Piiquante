@@ -8,15 +8,7 @@ dotenv.config();
 const path = require('path');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce'); //Importation routes 'sauce'
-
 const fs = require('fs');
-
-// 🔹 Création du dossier images si il n'existe pas
-const imagesDir = path.join(__dirname, 'images');
-if (!fs.existsSync(imagesDir)) {
-  fs.mkdirSync(imagesDir);
-  console.log('Dossier images créé automatiquement');
-}
 
 const myUrlOfDataBase = `mongodb+srv://${process.env.USER_DATABASE}:${process.env.PASSWORD_DATABASE}@${process.env.SERVER_DATABASE}/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
 
@@ -44,6 +36,12 @@ const limiter = rateLimit({
   standardHeaders: true, // Retour info limite atteinte dans l'en-tête 'RateLimit-*'
   legacyHeaders: false, // Désactivation de l'en-tête 'X-RateLimit-*'
 });
+
+// 🔹 ROUTE PING (AVANT TOUT)
+app.get('/ping', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.use(limiter);
 /****/
 
@@ -66,25 +64,7 @@ app.use((req, res, next) => {
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' })); //Autorisation des routes d'origine différente y compris la route statique pour la gestion des images
 /****/
-// 🔹 Création du dossier images_prod si il n'existe pas (pour prod)
-const imagesDirProd = path.join(__dirname, 'images_prod');
-if (!fs.existsSync(imagesDirProd)) {
-  fs.mkdirSync(imagesDirProd);
-  console.log('Dossier images_prod créé automatiquement');
-}
-
-// 🔹 Middleware pour servir les images selon l'environnement
 app.use(express.json()); //Accès au corps de la requête POST si celui-ci est au format JSON
-if (process.env.NODE_ENV === 'production') {
-  app.use('/images', express.static(path.join(__dirname, 'images_prod')));
-} else {
-  app.use('/images', express.static(path.join(__dirname, 'images')));
-}
-
-// 🔹 ROUTE PING (AVANT TOUT)
-app.get('/ping', (req, res) => {
-  res.status(200).send('OK');
-});
 
 //Importation de la route 'images'
 // app.use('/images', express.static(path.join(__dirname, 'images')));

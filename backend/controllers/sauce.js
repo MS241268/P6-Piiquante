@@ -1,174 +1,230 @@
-const Sauce = require("../models/Sauce")
-const User = require('../models/User')
-const fs = require('fs')//Importation du module 'fs' (file system) de NodeJS
+const Sauce = require('../models/Sauce');
+const User = require('../models/User');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs'); //Importation du module 'fs' (file system) de NodeJS
 
 //Visualisation de toutes les sauces
 exports.getAllSauces = (req, res, next) => {
-	Sauce.find()
-	  .then((sauces) => res.status(200).json(sauces))
-	  .catch((error) => res.status(404).json({ error }))
-  }
+  Sauce.find()
+    .then((sauces) => res.status(200).json(sauces))
+    .catch((error) => res.status(404).json({ error }));
+};
 /****/
 
 //Création d'une sauce
 exports.createSauce = (req, res, next) => {
-	const sauceObject = JSON.parse(req.body.sauce)//Conversion corps de la requête (Cractéristiques sauce renseignées par l'utilisateur) de texte en tableau tableau
-	delete sauceObject._id//Suppression de l'Id sauce issue du frontend
-	delete sauceObject._userId//Suppression de l'Id utilisateur
-	const sauce = new Sauce ({
-		...sauceObject,
-		userId: req.auth.userId,//Authentification de l'utilisateur via le token (pour plus de fiabilité)
-		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,//Chemin où sera située l'image dans le backend
-		likes: 0,
-		dislikes: 0,
-	})
-	sauce.save()//Enregistrement dans la data base
-	.then(() => {res.status(201).json({ message: 'Objet enregistré !' })})
-	.catch(error => { res.status(400).json({ error })})
-}
+  const sauceObject = JSON.parse(req.body.sauce); //Conversion corps de la requête (Cractéristiques sauce renseignées par l'utilisateur) de texte en tableau tableau
+  delete sauceObject._id; //Suppression de l'Id sauce issue du frontend
+  delete sauceObject._userId; //Suppression de l'Id utilisateur
+  const sauce = new Sauce({
+    ...sauceObject,
+    userId: req.auth.userId, //Authentification de l'utilisateur via le token (pour plus de fiabilité)
+    imageUrl: req.file.path, //Chemin où sera située l'image dans le backend
+    likes: 0,
+    dislikes: 0,
+  });
+  sauce
+    .save() //Enregistrement dans la data base
+    .then(() => {
+      res.status(201).json({ message: 'Objet enregistré !' });
+    })
+    .catch((error) => {
+      res.status(400).json({ error });
+    });
+};
 /****/
 
 //visualisation d'une sauce
 exports.getOneSauce = (req, res, next) => {
-	Sauce.findOne({ _id: req.params.id})
-	.then (sauce => res.status(200).json(sauce))
-	.catch(error => res.status(404).json ({ error }))
-}
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => res.status(200).json(sauce))
+    .catch((error) => res.status(404).json({ error }));
+};
 /****/
 
 //Modification d'une sauce
 exports.updateSauce = (req, res, next) => {
-	Sauce.findOne({ _id: req.params.id })//Selection de l'objet dans la data base
-		.then((sauce) => {
-			//L'utilisateur est il le propriétaire de l'objet ?
-			if (sauce.userId != req.auth.userId) {// Si l'utilisateur n'est pas le propriétaire
-				res.status(401).json ({ message : 'Autorisation KO !' })
-			} else {// Si l'utilisateur est le propriétaire
-				if (req.file) {//Y a t il un objet "file"
-						Sauce.findOne({ _id: req.params.id })//Selection de l'objet dans la data base
-							.then((sauce) => {
-							//Récupération du nom de l'image à supprimer dans la data base
-							const filename = sauce.imageUrl.split('/images')[1]
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      if (sauce.userId != req.auth.userId) {
+        return res.status(401).json({ message: 'Autorisation KO !' });
+      }
 
-							//Suppression de l'ancienne image dans le dossier 'images' du serveur
-							fs.unlink(`images/${filename}`, (error) => {
-								if(error) throw error
-							})
-						})
-							.catch((error) => res.status(404).json({ error}))
-				}
+      // Si une nouvelle image est uploadée
+      if (req.file && sauce.imageUrl) {
+        // extraire public_id Cloudinary à partir de l'URL
+        const segments = sauce.imageUrl.split('/');
+        const publicIdWithExt = segments[segments.length - 1]; // ex: name_123456.jpg
+        const publicId = publicIdWithExt.replace(/\.[^/.]+$/, ''); // enlever extension
 
-	//Objet mis à jour dans la data base => 2 cas possibles : Le propriétaire modifie l'objet avec une nouvelle image OU modifie uniquement le 'formulaire' de la sauce
-	const sauceObject = req.file ? {//Y a t il une image dans l'objet ?
-		//Si une image existe dans l'objet modifié
-		...JSON.parse(req.body.sauce),// => transformation de la chaîne de caractères en objet JS
-		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`//Remplacement de l'image par la nouvelle
-	} : {
-		//Si aucune image n'est dans l'objet modifié
-		...req.body
-	}
-	//MàJ de la data base
-	delete sauceObject._id//Suppression l'id de la requête (Sécurité : évite de créer un objet à son nom et eviter qu'il modifie l'objet et le réassigne à un autre utilisateur)
-	Sauce.updateOne ({ _id: req.params.id}, { ...sauceObject, _id: req.params.id })
-		.then(() => {
-			res.status(200).json({ message: 'Objet modifié !'})})
-		.catch(error => res.status(404).json({ error }))
-				}
-	})
-	.catch((error) => {
-		res.status(400).json({ error })
-	})
-}
+        // Supprimer l'ancienne image sur Cloudinary
+        cloudinary.uploader.destroy(
+          `p6_sauces/${publicId}`,
+          (error, result) => {
+            if (error) console.error('Erreur suppression Cloudinary :', error);
+          }
+        );
+
+        // Mettre à jour l'imageUrl avec la nouvelle image Cloudinary
+        sauce.imageUrl = req.file.path;
+      }
+
+      // Mettre à jour les autres champs
+      const sauceObject = req.body;
+      Object.assign(sauce, sauceObject);
+
+      // Sauvegarde finale
+      sauce
+        .save()
+        .then(() => res.status(200).json({ message: 'Objet modifié !' }))
+        .catch((error) => res.status(400).json({ error }));
+    })
+    .catch((error) => res.status(404).json({ error }));
+};
+
 /****/
 
 //Suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
-	Sauce.findOne({ _id: req.params.id})//Récupération de l'objet dans la base de données et mise en forme de la clé "_id :"
-		.then(sauce => {
-			if(sauce.userId != req.auth.userId) {//Vérification si l'utilisateur est propriétaire de l'objet
-				res.status(401).json({ message: 'Autorisation KO !' })
-			} else {
-				const filename = sauce.imageUrl.split('/images')[1]//Récupération du nom de l'image à supprimer
-				fs.unlink(`images/${filename}`, () => {//suppression de l'image sur le serveur
-					Sauce.deleteOne({ _id: req.params.id })
-						.then(() => {res.status(200).json({ message: 'Objet Supprimé !'})})
-						.catch(error => res.status(401).json({ error }))
-				})
-			}
-		})
-		.catch(error => {
-			res.status(500).json({ error })
-		})
-}
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      if (sauce.userId != req.auth.userId) {
+        return res.status(401).json({ message: 'Autorisation KO !' });
+      }
+
+      // Supprimer l'image sur Cloudinary si elle existe
+      if (sauce.imageUrl) {
+        const segments = sauce.imageUrl.split('/');
+        const publicIdWithExt = segments[segments.length - 1]; // ex: name_123456.jpg
+        const publicId = publicIdWithExt.replace(/\.[^/.]+$/, ''); // enlever extension
+
+        cloudinary.uploader.destroy(`p6_sauces/${publicId}`, (err, result) => {
+          if (err) console.error('Erreur suppression Cloudinary :', err);
+        });
+      }
+
+      // Supprimer la sauce dans MongoDB
+      Sauce.deleteOne({ _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Objet Supprimé !' }))
+        .catch((error) => res.status(400).json({ error }));
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
 /****/
 
 exports.likeDislikeSauce = (req, res, next) => {
-	if (req.body.userId !== req.auth.userId){//L'utilisateur ne correspond pas à l'utilisateur fourni par le token
-			return res.status(401).json({ message: 'Non autorisé !' })
-		} else {//L'utilisateur correspond à l'utilisateur fourni par le token
-			Sauce.findOne({ _id: req.params.id })
-				.then((sauce) => {//Récupération de l'objet dans la base de données
-					//L'utilisateur like
-					if(!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1){//Si l'utilisateur n'est pas dans le tableau 'userLiked' ET qu'il like l'objet
-					
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données
-							{$inc: {likes : 1} ,//"$inc" opérateur MongoDB (incrémentation du total de likes de +1 )
-							$push: {usersLiked : req.body.userId}},//"$push" opérateur MongoDB (Référencement de l''userId' qui a liké dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : ajout du like !"} ))
+  if (req.body.userId !== req.auth.userId) {
+    //L'utilisateur ne correspond pas à l'utilisateur fourni par le token
+    return res.status(401).json({ message: 'Non autorisé !' });
+  } else {
+    //L'utilisateur correspond à l'utilisateur fourni par le token
+    Sauce.findOne({ _id: req.params.id })
+      .then((sauce) => {
+        //Récupération de l'objet dans la base de données
+        //L'utilisateur like
+        if (
+          !sauce.usersLiked.includes(req.body.userId) &&
+          req.body.like === 1
+        ) {
+          //Si l'utilisateur n'est pas dans le tableau 'userLiked' ET qu'il like l'objet
 
-							.catch((error) => res.status(400).json({ error }))
-					}
-					/****/
+          //MàJ dans la data base de l'objet
+          Sauce.updateOne(
+            { _id: req.params.id }, //Récupération de l'objet dans la base de données
+            {
+              $inc: { likes: 1 }, //"$inc" opérateur MongoDB (incrémentation du total de likes de +1 )
+              $push: { usersLiked: req.body.userId },
+            } //"$push" opérateur MongoDB (Référencement de l''userId' qui a liké dans le tableau "usersLiked")
+          )
+            .then(() =>
+              res.status(201).json({
+                message: 'userId : ' + req.body.userId + ' : ajout du like !',
+              })
+            )
 
-					//L'utilisateur annule son like 
-					if(sauce.usersLiked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est dans le tableau 'userLiked' ET annule son like sur l'objet
+            .catch((error) => res.status(400).json({ error }));
+        }
+        /****/
 
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données
-							{$inc: {likes : -1} ,//"$inc" opérateur MongoDB (décrémentation du total de likes de -1)
-							$pull: {usersLiked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l''userId' qui annule son like dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : annulation du like !"} ))
+        //L'utilisateur annule son like
+        if (sauce.usersLiked.includes(req.body.userId) && req.body.like === 0) {
+          //Si l'utilisateur est dans le tableau 'userLiked' ET annule son like sur l'objet
 
-							.catch((error) => res.status(400).json({ error }))	
-					}
-					/****/
+          //MàJ dans la data base de l'objet
+          Sauce.updateOne(
+            { _id: req.params.id }, //Récupération de l'objet dans la base de données
+            {
+              $inc: { likes: -1 }, //"$inc" opérateur MongoDB (décrémentation du total de likes de -1)
+              $pull: { usersLiked: req.body.userId },
+            } //"$pull" opérateur MongoDB (suppression de l''userId' qui annule son like dans le tableau "usersLiked")
+          )
+            .then(() =>
+              res.status(201).json({
+                message:
+                  'userId : ' + req.body.userId + ' : annulation du like !',
+              })
+            )
 
-					//L'utilisateur dislike
-					if(!sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1){//Si l'utilisateur n'est pas dans le tableau 'userDisliked' ET qu'il dislike l'objet
-					
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données
-							{$inc: {dislikes : 1} ,//"$inc" opérateur MongoDB (incrémentation du total de dislikes de +1 )
-							$push: {usersDisliked : req.body.userId}},//"$push" opérateur MongoDB (Référencement de l''userId' qui a disliké dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : ajout du dislike !"} ))
+            .catch((error) => res.status(400).json({ error }));
+        }
+        /****/
 
-							.catch((error) => res.status(400).json({ error }))
-							
-					}
-					/****/
+        //L'utilisateur dislike
+        if (
+          !sauce.usersDisliked.includes(req.body.userId) &&
+          req.body.like === -1
+        ) {
+          //Si l'utilisateur n'est pas dans le tableau 'userDisliked' ET qu'il dislike l'objet
 
-					//L'utilisateur annule son dislike 
-					if(sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0){//Si l'utilisateur est dans le tableau 'userDisliked' ET annule son dislike sur l'objet
+          //MàJ dans la data base de l'objet
+          Sauce.updateOne(
+            { _id: req.params.id }, //Récupération de l'objet dans la base de données
+            {
+              $inc: { dislikes: 1 }, //"$inc" opérateur MongoDB (incrémentation du total de dislikes de +1 )
+              $push: { usersDisliked: req.body.userId },
+            } //"$push" opérateur MongoDB (Référencement de l''userId' qui a disliké dans le tableau "usersLiked")
+          )
+            .then(() =>
+              res.status(201).json({
+                message:
+                  'userId : ' + req.body.userId + ' : ajout du dislike !',
+              })
+            )
 
-						//MàJ dans la data base de l'objet
-						Sauce.updateOne(
-							{ _id : req.params.id },//Récupération de l'objet dans la base de données
-							{$inc: {dislikes : -1} ,//"$inc" opérateur MongoDB (décrémentation du total de dislikes de -1)
-							$pull: {usersDisliked : req.body.userId}},//"$pull" opérateur MongoDB (suppression de l''userId' qui annule son dislike dans le tableau "usersLiked")
-						)
-							.then(() => res.status(201).json( { message: "userId : " + req.body.userId + " : annulation du dislike !"} ))
+            .catch((error) => res.status(400).json({ error }));
+        }
+        /****/
 
-							.catch((error) => res.status(400).json({ error }))	
-					}
-					/****/
-				})
-				.catch((error) => res.status(404).json({ message : 'Sauce non trouvée !' }))
-		}
-}
+        //L'utilisateur annule son dislike
+        if (
+          sauce.usersDisliked.includes(req.body.userId) &&
+          req.body.like === 0
+        ) {
+          //Si l'utilisateur est dans le tableau 'userDisliked' ET annule son dislike sur l'objet
+
+          //MàJ dans la data base de l'objet
+          Sauce.updateOne(
+            { _id: req.params.id }, //Récupération de l'objet dans la base de données
+            {
+              $inc: { dislikes: -1 }, //"$inc" opérateur MongoDB (décrémentation du total de dislikes de -1)
+              $pull: { usersDisliked: req.body.userId },
+            } //"$pull" opérateur MongoDB (suppression de l''userId' qui annule son dislike dans le tableau "usersLiked")
+          )
+            .then(() =>
+              res.status(201).json({
+                message:
+                  'userId : ' + req.body.userId + ' : annulation du dislike !',
+              })
+            )
+
+            .catch((error) => res.status(400).json({ error }));
+        }
+        /****/
+      })
+      .catch((error) =>
+        res.status(404).json({ message: 'Sauce non trouvée !' })
+      );
+  }
+};
