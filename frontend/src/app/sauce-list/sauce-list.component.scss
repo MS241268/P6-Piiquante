@@ -44,14 +44,11 @@
 
   h4 {
     color: #616263;
-    font-size: 1.2rem;
     margin: 0.8rem 0;
-    font-weight: 500;
   }
 
   p {
     color: #616263;
-    font-size: 1rem;
     margin: 0;
   }
 
@@ -67,7 +64,7 @@
 .list-title {
   text-align: center;
   margin: 1em auto;
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   color: #8fe8f9f0;
   font-weight: bold;
 }
@@ -90,16 +87,8 @@
     height: 140px;
   }
 
-  .sauce-list-item h4 {
-    font-size: 0.95rem;
-  }
-
-  .sauce-list-item p {
-    font-size: 0.85rem;
-  }
-
   .list-title {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 }
 
@@ -121,16 +110,8 @@
     height: 180px;
   }
 
-  .sauce-list-item h4 {
-    font-size: 1.1rem;
-  }
-
-  .sauce-list-item p {
-    font-size: 0.95rem;
-  }
-
   .list-title {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
   }
 }
 
@@ -145,10 +126,6 @@
   .sauce-list-item {
     max-width: 260px;
     height: 360px;
-  }
-
-  .list-title {
-    font-size: 2.5rem;
   }
 }
 @media (min-width: 992px) and (orientation: landscape) and (pointer: coarse) {

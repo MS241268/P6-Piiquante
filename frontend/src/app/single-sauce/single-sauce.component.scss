@@ -1,23 +1,32 @@
 .sauce-container {
+  // width: 95% !important;
   display: flex;
-  overflow-wrap: break-word;
+  justify-content: space-evenly;
+  flex-wrap: nowrap; // pour éviter que ça déborde
+  gap: 20px; // espace entre img et texte
+
   img {
     max-width: 45%;
     max-height: 70vh;
     border-radius: 15px;
-    flex: 1;
+    flex-shrink: 0; // flex-grow flex-shrink flex-basis
   }
+
   p {
-    width: 68%;
+    overflow-wrap: break-word; // coupe les mots trop longs
+    word-break: break-word; // compatible avec certains navigateurs
+    margin: 15px 0;
   }
 }
-
 .sauce-info {
-  color: #00d0f9;
+  flex: 1 1 0; // prend tout l'espace restant
+  // max-width: 55%;
+  color: #8fe8f9f0;
   padding: 40px 20px;
-  flex: 1;
+  h3 {
+    font-weight: bold;
+  }
 }
-
 .manufacturer {
   margin: 0;
 }
@@ -78,6 +87,7 @@
 /* ============================= */
 @media (max-width: 720px) {
   .sauce-container {
+    margin: auto;
     flex-direction: column;
     align-items: center;
 
@@ -89,21 +99,23 @@
   }
 
   .sauce-info {
+    max-width: 100%;
     padding: 20px 10px;
     text-align: center;
   }
 
   .like-buttons {
+    margin-bottom: 20px;
     justify-content: center;
   }
 
   .control-buttons {
     display: flex;
-    flex-direction: column;
-
+    flex-direction: row;
+    justify-content: space-evenly;
     button {
       margin: 0.5em 0;
-      width: 100%;
+      width: 25%;
     }
   }
 }
@@ -122,6 +134,7 @@
 
   .sauce-info {
     width: 100%;
+    padding: 15px 0;
     text-align: center;
   }
 }
@@ -154,6 +167,7 @@
 /* ============================= */
 @media (min-width: 1025px) {
   .sauce-container {
+    margin: auto;
     flex-direction: row;
 
     img {
