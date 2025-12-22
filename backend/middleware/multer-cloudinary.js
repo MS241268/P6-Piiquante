@@ -11,7 +11,10 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'p6_sauces',
+    folder:
+      process.env.NODE_ENV === 'production'
+        ? 'p6_sauces_prod'
+        : 'p6_sauces_dev',
     allowed_formats: ['jpg', 'jpeg', 'png'],
     public_id: (req, file) => {
       const name = file.originalname
