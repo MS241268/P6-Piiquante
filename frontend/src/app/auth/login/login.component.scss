@@ -12,3 +12,8 @@
 .form-control {
   width: 400px;
 }
+@media (max-width: 599px) {
+  .form-group input {
+    width: 100%;
+  }
+}
