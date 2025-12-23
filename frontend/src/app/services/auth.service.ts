@@ -12,16 +12,7 @@ export class AuthService {
   private authToken = '';
   private userId = '';
 
-  constructor(private http: HttpClient, private router: Router) {
-    // Au démarrage, lire le token et userId dans le localStorage
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    if (token && userId) {
-      this.authToken = token;
-      this.userId = userId;
-      this.isAuth$.next(true);
-    }
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   createUser(email: string, password: string) {
     return this.http.post<{ message: string }>(
@@ -72,5 +63,12 @@ export class AuthService {
   // Méthode pratique pour le guard
   isAuthenticated(): boolean {
     return !!this.authToken;
+  }
+  forceLogout() {
+    this.authToken = '';
+    this.userId = '';
+    this.isAuth$.next(false);
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
   }
 }
