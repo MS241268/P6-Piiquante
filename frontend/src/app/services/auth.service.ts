@@ -12,7 +12,16 @@ export class AuthService {
   private authToken = '';
   private userId = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    // Au démarrage, lire le token et userId dans le localStorage
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (token && userId) {
+      this.authToken = token;
+      this.userId = userId;
+      this.isAuth$.next(true);
+    }
+  }
 
   createUser(email: string, password: string) {
     return this.http.post<{ message: string }>(
@@ -40,6 +49,10 @@ export class AuthService {
           this.userId = userId;
           this.authToken = token;
           this.isAuth$.next(true);
+
+          // STOCKER DANS localStorage pour persistance au refresh
+          localStorage.setItem('token', token);
+          localStorage.setItem('userId', userId);
         })
       );
   }
@@ -48,6 +61,16 @@ export class AuthService {
     this.authToken = '';
     this.userId = '';
     this.isAuth$.next(false);
+
+    // SUPPRIMER du localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+
     this.router.navigate(['login']);
+  }
+
+  // Méthode pratique pour le guard
+  isAuthenticated(): boolean {
+    return !!this.authToken;
   }
 }

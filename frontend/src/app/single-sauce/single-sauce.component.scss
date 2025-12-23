@@ -1,5 +1,4 @@
 .sauce-container {
-  // width: 95% !important;
   display: flex;
   justify-content: space-evenly;
   flex-wrap: nowrap; // pour éviter que ça déborde
@@ -20,7 +19,6 @@
 }
 .sauce-info {
   flex: 1 1 0; // prend tout l'espace restant
-  // max-width: 55%;
   color: #8fe8f9f0;
   padding: 40px 20px;
   h3 {
@@ -116,6 +114,7 @@
     button {
       margin: 0.5em 0;
       width: 25%;
+      font-size: 10px;
     }
   }
 }

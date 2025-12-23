@@ -72,7 +72,7 @@
 /* ================================================= */
 /* 📱 MOBILE portrait + paysage → 1 COLONNE */
 /* ================================================= */
-@media (max-width: 767px) {
+@media (max-width: 599px) {
   .sauce-list {
     grid-template-columns: 1fr; /*  1 colonne forcée */
   }
@@ -95,7 +95,7 @@
 /* ================================================= */
 /* 📱 TABLETTE PORTRAIT → 2 COLONNES */
 /* ================================================= */
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 600px) and (max-width: 899px) {
   .sauce-list {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -118,7 +118,7 @@
 /* ================================================= */
 /* 📱 TABLETTE PAYSAGE → 3 COLONNES */
 /* ================================================= */
-@media (min-width: 992px) and (max-width: 1199px) {
+@media (min-width: 900px) and (max-width: 1199px) {
   .sauce-list {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -128,21 +128,21 @@
     height: 360px;
   }
 }
-@media (min-width: 992px) and (orientation: landscape) and (pointer: coarse) {
-  .sauce-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
 /* ================================================= */
 /* 🖥 PC → 5 COLONNES FIXES */
 /* ================================================= */
-@media (min-width: 1200px) and (pointer: fine) {
+@media (min-width: 1200px) and (max-width: 1599px) {
   .sauce-list {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .sauce-list-item {
     max-width: 260px;
     height: 380px;
+  }
+}
+@media (min-width: 1600px) {
+  .sauce-list {
+    grid-template-columns: repeat(5, 1fr);
   }
 }

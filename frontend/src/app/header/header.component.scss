@@ -2,7 +2,6 @@ nav {
   box-sizing: border-box;
   width: 95%;
   background-color: lightslategray;
-  // max-width: 1400px;
   border-radius: 15px;
   margin: auto;
   margin-top: 20px;
@@ -12,7 +11,6 @@ nav {
   display: flex;
   padding: 20px;
   justify-content: space-between;
-  // border-bottom: thin solid black;
 }
 
 h1 {
@@ -96,11 +94,8 @@ a {
         height: 3em;
       }
     }
-
-    .left-nav {
-      order: 2;
-      width: 100%;
-
+    .left-nav,
+    .right-nav {
       ul {
         flex-direction: column;
         align-items: center;
@@ -110,20 +105,14 @@ a {
         margin: 8px 0;
       }
     }
+    .left-nav {
+      order: 2;
+      width: 100%;
+    }
 
     .right-nav {
       order: 3;
       width: 100%;
-      ul {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0; // ← espace à 0
-      }
-
-      li {
-        margin: 0; // ← supprime les marges parasites
-      }
     }
   }
 }
