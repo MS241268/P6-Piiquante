@@ -1,8 +1,9 @@
 .sauce-container {
   display: flex;
   justify-content: space-evenly;
-  flex-wrap: nowrap; // pour éviter que ça déborde
+  flex-wrap: wrap; // pour éviter que ça déborde
   gap: 20px; // espace entre img et texte
+  object-position: center center;
 
   img {
     max-width: 45%;
@@ -76,26 +77,34 @@
 }
 
 .control-buttons {
-  button {
-    margin: 1em 1em 0 0;
-  }
+  // flex-wrap: nowrap;  display: flex;
+  flex-wrap: 0 0 100%;
+  width: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: center; /* ou center */
+  gap: 1rem;
+}
+.control-buttons button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  // width: 100%;
+  margin: 1em 1em 0 0;
 }
 /* ============================= */
 /* 📱 Mobile ≤ 720px */
 /* ============================= */
-@media (max-width: 720px) {
+@media (max-width: 599px) {
   .sauce-container {
     margin: auto;
     flex-direction: column;
     align-items: center;
-
-    img {
-      max-width: 100%;
-      max-height: 40vh;
-      margin-bottom: 1.5rem;
-    }
   }
-
+  img {
+    max-width: 100%;
+    max-height: 40vh;
+    margin-bottom: 1.5rem;
+  }
   .sauce-info {
     max-width: 100%;
     padding: 20px 10px;
@@ -106,28 +115,42 @@
     margin-bottom: 20px;
     justify-content: center;
   }
-
-  .control-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    button {
-      margin: 0.5em 0;
-      width: 25%;
-      font-size: 10px;
-    }
-  }
+  //   .control-buttons button {
+  //     margin: 0.5em 0;
+  //     width: 25%;
+  //     font-size: 10px;
+  //   }
 }
-@media (min-width: 721px) and (max-width: 767px) {
+@media (min-width: 600px) and (max-width: 899px) {
+  // .sauce-container {
+  //   flex-wrap: wrap;
+  //   justify-content: center; // centre horizontalement
+  //   align-items: center; // centre verticalement
+  // }
+  // img {
+  //   max-width: 80%;
+  //   max-height: 40vh;
+  //   margin-bottom: 1rem;
+  // }
+
+  // .sauce-info {
+  //   width: 100%;
+  //   padding: 15px 0;
+  //   text-align: center;
+  // }
   .sauce-container {
+    display: flex;
     flex-wrap: wrap;
-    justify-content: center; // centre horizontalement
-    align-items: center; // centre verticalement
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh; /* OBLIGATOIRE pour le centrage vertical */
   }
 
-  img {
-    max-width: 100%;
-    max-height: 40vh;
+  .sauce-container img {
+    width: auto;
+    height: 100%;
+    max-height: 60vh;
+    object-fit: contain;
     margin-bottom: 1rem;
   }
 
@@ -140,42 +163,56 @@
 /* ============================= */
 /* 📱 Tablette 768px → 1024px */
 /* ============================= */
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 900px) and (max-width: 1199px) {
   .sauce-container {
     flex-direction: row;
 
-    img {
-      max-width: 40%;
-      max-height: 55vh;
-    }
+    // img {
+    //   max-width: 40%;
+    //   max-height: 55vh;
+    // }
   }
 
   .sauce-info {
     padding: 30px 20px;
   }
 
-  .control-buttons {
-    button {
-      margin: 0.8em 0.8em 0 0;
-    }
-  }
+  // .control-buttons {
+  //   button {
+  //     margin: 0.8em 0.8em 0 0;
+  //   }
+  // }
 }
 
 /* ============================= */
-/* 🖥 Desktop > 1024px */
+/* 🖥 Desktop > 1200px */
 /* ============================= */
-@media (min-width: 1025px) {
+@media (min-width: 1200px) {
   .sauce-container {
     margin: auto;
-    flex-direction: row;
-
-    img {
-      max-width: 45%;
-      max-height: 70vh;
-    }
+  }
+  img {
+    max-width: 45%;
+    max-height: 70vh;
   }
 
   .sauce-info {
+    width: 100%;
     padding: 40px 20px;
   }
+  .control-buttons {
+    // flex-wrap: nowrap;  display: flex;
+    flex-wrap: 0 0 100%;
+    width: 75%;
+    margin: auto;
+    display: flex;
+    justify-content: center; /* ou center */
+    gap: 1rem;
+  }
+  //   .control-buttons button {
+  //     flex: 0 0 auto;
+  //     white-space: nowrap;
+  //     // width: 100%;
+  //     margin: 1em 1em 0 0;
+  //   }
 }
