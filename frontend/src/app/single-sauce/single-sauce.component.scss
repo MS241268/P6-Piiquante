@@ -6,6 +6,7 @@
   object-position: center center;
 
   img {
+    align-self: flex-start;
     max-width: 45%;
     max-height: 70vh;
     border-radius: 15px;
@@ -21,10 +22,14 @@
 .sauce-info {
   flex: 1 1 0; // prend tout l'espace restant
   color: #8fe8f9f0;
-  padding: 40px 20px;
-  h3 {
-    font-weight: bold;
-  }
+  text-align: left;
+  padding: 0px 20px;
+}
+h1 {
+  text-align: center;
+}
+h3 {
+  font-weight: bold;
 }
 .manufacturer {
   margin: 0;
@@ -79,7 +84,7 @@
 .control-buttons {
   // flex-wrap: nowrap;  display: flex;
   flex-wrap: 0 0 100%;
-  width: 50%;
+  width: 55%;
   margin: auto;
   display: flex;
   justify-content: center; /* ou center */
@@ -101,43 +106,20 @@
     align-items: center;
   }
   img {
+    align-self: center !important;
     max-width: 100%;
     max-height: 40vh;
-    margin-bottom: 1.5rem;
   }
   .sauce-info {
     max-width: 100%;
-    padding: 20px 10px;
-    text-align: center;
   }
 
   .like-buttons {
     margin-bottom: 20px;
     justify-content: center;
   }
-  //   .control-buttons button {
-  //     margin: 0.5em 0;
-  //     width: 25%;
-  //     font-size: 10px;
-  //   }
 }
 @media (min-width: 600px) and (max-width: 899px) {
-  // .sauce-container {
-  //   flex-wrap: wrap;
-  //   justify-content: center; // centre horizontalement
-  //   align-items: center; // centre verticalement
-  // }
-  // img {
-  //   max-width: 80%;
-  //   max-height: 40vh;
-  //   margin-bottom: 1rem;
-  // }
-
-  // .sauce-info {
-  //   width: 100%;
-  //   padding: 15px 0;
-  //   text-align: center;
-  // }
   .sauce-container {
     display: flex;
     flex-wrap: wrap;
@@ -151,13 +133,10 @@
     height: 100%;
     max-height: 60vh;
     object-fit: contain;
-    margin-bottom: 1rem;
   }
 
   .sauce-info {
     width: 100%;
-    padding: 15px 0;
-    text-align: center;
   }
 }
 /* ============================= */
@@ -166,22 +145,7 @@
 @media (min-width: 900px) and (max-width: 1199px) {
   .sauce-container {
     flex-direction: row;
-
-    // img {
-    //   max-width: 40%;
-    //   max-height: 55vh;
-    // }
   }
-
-  .sauce-info {
-    padding: 30px 20px;
-  }
-
-  // .control-buttons {
-  //   button {
-  //     margin: 0.8em 0.8em 0 0;
-  //   }
-  // }
 }
 
 /* ============================= */
@@ -198,21 +162,13 @@
 
   .sauce-info {
     width: 100%;
-    padding: 40px 20px;
   }
   .control-buttons {
-    // flex-wrap: nowrap;  display: flex;
     flex-wrap: 0 0 100%;
     width: 75%;
     margin: auto;
     display: flex;
-    justify-content: center; /* ou center */
+    justify-content: center;
     gap: 1rem;
   }
-  //   .control-buttons button {
-  //     flex: 0 0 auto;
-  //     white-space: nowrap;
-  //     // width: 100%;
-  //     margin: 1em 1em 0 0;
-  //   }
 }

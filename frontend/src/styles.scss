@@ -67,7 +67,7 @@ a {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1050px) {
   :root {
     --h1-size: 3rem;
     --scale: 1;
@@ -94,7 +94,34 @@ a {
     font-size: calc(var(--h1-size) / (var(--scale) * 3));
   }
 }
-@media (min-width: 1200px) {
+@media (min-width: 1051px) and (max-width: 1288px) {
+  :root {
+    --h1-size: 3rem;
+    --scale: 2;
+  }
+  h1 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 0.7)) !important;
+    font-weight: bold;
+  }
+  h2 {
+    font-size: calc(var(--h1-size) / var(--scale));
+  }
+  h3 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 0.9));
+  }
+  h4 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.2));
+    font-weight: bold;
+  }
+  h5 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.25));
+  }
+  p,
+  a {
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.5));
+  }
+}
+@media (min-width: 1289px) {
   :root {
     --h1-size: 3rem;
     --scale: 1;
@@ -102,5 +129,22 @@ a {
   h1 {
     font-size: calc(var(--h1-size)) !important;
     font-weight: bold;
+  }
+  h2 {
+    font-size: calc(var(--h1-size) / var(--scale));
+  }
+  h3 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.6));
+  }
+  h4 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 2.7));
+    font-weight: bold;
+  }
+  h5 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 2.8));
+  }
+  p,
+  a {
+    font-size: calc(var(--h1-size) / (var(--scale) * 2.9));
   }
 }
