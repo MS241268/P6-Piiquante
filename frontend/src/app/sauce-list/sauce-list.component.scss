@@ -79,12 +79,11 @@
 
   .sauce-list-item {
     max-width: 320px;
-    height: 280px;
   }
 
   .sauce-list-item img {
-    width: 140px;
-    height: 140px;
+    width: 200px;
+    height: 230px;
   }
 
   .list-title {
@@ -119,14 +118,6 @@
 /* 📱 TABLETTE PAYSAGE → 3 COLONNES */
 /* ================================================= */
 @media (min-width: 900px) and (max-width: 1199px) {
-  :root {
-    --h1-size: 3rem;
-    --scale: 2;
-  }
-  h4 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 1.3));
-    font-weight: bold;
-  }
   .sauce-list {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -139,7 +130,16 @@
 /* ================================================= */
 /* 🖥 PC → 5 COLONNES FIXES */
 /* ================================================= */
+
 @media (min-width: 1200px) and (max-width: 1599px) {
+  :root {
+    --h1-size: 3rem;
+    --scale: 2;
+  }
+  h4 {
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.35)) !important;
+    font-weight: bold;
+  }
   .sauce-list {
     grid-template-columns: repeat(4, 1fr);
   }

@@ -19,7 +19,7 @@ mat-spinner {
   --scale: 1;
 }
 h1 {
-  font-size: var(--h1-size) !important;
+  font-size: var(--h1-size);
   font-weight: bold;
 }
 h2 {
@@ -45,7 +45,7 @@ a {
     --scale: 1;
   }
   h1 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 2)) !important;
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.8)) !important;
     font-weight: bold;
   }
   h2 {
@@ -73,7 +73,7 @@ a {
     --scale: 1;
   }
   h1 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 1.7)) !important;
+    font-size: calc(var(--h1-size) / (var(--scale) * 1.9));
     font-weight: bold;
   }
   h2 {
@@ -87,20 +87,20 @@ a {
     font-weight: bold;
   }
   h5 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 2.725));
+    font-size: calc(var(--h1-size) / (var(--scale) * 2.8));
   }
   p,
   a {
     font-size: calc(var(--h1-size) / (var(--scale) * 3));
   }
 }
-@media (min-width: 1051px) and (max-width: 1288px) {
+@media (min-width: 1051px) {
   :root {
     --h1-size: 3rem;
     --scale: 2;
   }
   h1 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 0.7)) !important;
+    font-size: calc(var(--h1-size) / (var(--scale) * 0.7));
     font-weight: bold;
   }
   h2 {
@@ -121,30 +121,31 @@ a {
     font-size: calc(var(--h1-size) / (var(--scale) * 1.5));
   }
 }
-@media (min-width: 1289px) {
-  :root {
-    --h1-size: 3rem;
-    --scale: 1;
-  }
-  h1 {
-    font-size: calc(var(--h1-size)) !important;
-    font-weight: bold;
-  }
-  h2 {
-    font-size: calc(var(--h1-size) / var(--scale));
-  }
-  h3 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 1.6));
-  }
-  h4 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 2.7));
-    font-weight: bold;
-  }
-  h5 {
-    font-size: calc(var(--h1-size) / (var(--scale) * 2.8));
-  }
-  p,
-  a {
-    font-size: calc(var(--h1-size) / (var(--scale) * 2.9));
-  }
-}
+
+// @media (min-width: 1289px) {
+//   :root {
+//     --h1-size: 3rem;
+//     --scale: 1;
+//   }
+//   h1 {
+//     font-size: calc(var(--h1-size)) !important;
+//     font-weight: bold;
+//   }
+//   h2 {
+//     font-size: calc(var(--h1-size) / var(--scale));
+//   }
+//   h3 {
+//     font-size: calc(var(--h1-size) / (var(--scale) * 1.6));
+//   }
+//   h4 {
+//     font-size: calc(var(--h1-size) / (var(--scale) * 2.7));
+//     font-weight: bold;
+//   }
+//   h5 {
+//     font-size: calc(var(--h1-size) / (var(--scale) * 2.8));
+//   }
+//   p,
+//   a {
+//     font-size: calc(var(--h1-size) / (var(--scale) * 2.9));
+//   }
+// }
