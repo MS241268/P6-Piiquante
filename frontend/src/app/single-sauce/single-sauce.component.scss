@@ -81,22 +81,20 @@ h3 {
 }
 
 .control-buttons {
-  // flex-wrap: nowrap;  display: flex;
   flex-wrap: 0 0 100%;
   width: 100%;
   margin: auto;
   display: flex;
-  justify-content: center; /* ou center */
+  justify-content: center;
   gap: 1rem;
 }
 .control-buttons button {
   flex: 0 0 auto;
   white-space: nowrap;
-  // width: 100%;
   margin: 1em 1em 0 0;
 }
 /* ============================= */
-/* 📱 Mobile ≤ 720px */
+/* 📱 Mobile Portrait ≤ 599px */
 /* ============================= */
 @media (max-width: 599px) {
   .sauce-container {
@@ -106,8 +104,8 @@ h3 {
   }
   img {
     align-self: center !important;
-    max-width: 100%;
-    max-height: 40vh;
+    max-width: 100% !important;
+    max-height: 60vh !important;
   }
   .sauce-info {
     max-width: 100%;
@@ -118,15 +116,10 @@ h3 {
     justify-content: center;
   }
 }
+/* ============================= */
+/* 📱 Mobile Paysage + Tablette Portrait 900px → 1199px */
+/* ============================= */
 @media (min-width: 600px) and (max-width: 899px) {
-  // :root {
-  //   --h1-size: 3rem;
-  //   --scale: 1;
-  // }
-  // h1 {
-  //   font-size: calc(var(--h1-size) / (var(--scale) * 1.7)) !important;
-  //   font-weight: bold;
-  // }
   .sauce-container {
     display: flex;
     flex-wrap: wrap;
@@ -134,7 +127,6 @@ h3 {
     align-items: center;
     min-height: 60vh; /* OBLIGATOIRE pour le centrage vertical */
   }
-
   .sauce-container img {
     width: auto;
     height: 100%;
@@ -147,17 +139,9 @@ h3 {
   }
 }
 /* ============================= */
-/* 📱 Tablette 768px → 1024px */
+/* 📱 Tablette 900px → 1199px */
 /* ============================= */
 @media (min-width: 900px) and (max-width: 1199px) {
-  // :root {
-  //   --h1-size: 3rem;
-  //   --scale: 1;
-  // }
-  // h1 {
-  //   font-size: calc(var(--h1-size) / (var(--scale) * 1.7)) !important;
-  //   font-weight: bold;
-  // }
   .sauce-container {
     flex-direction: row;
   }

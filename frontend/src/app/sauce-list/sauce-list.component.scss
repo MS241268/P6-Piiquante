@@ -70,7 +70,7 @@
 }
 
 /* ================================================= */
-/* 📱 MOBILE portrait + paysage → 1 COLONNE */
+/* 📱 MOBILE PORTRAIT → 1 COLONNE */
 /* ================================================= */
 @media (max-width: 599px) {
   .sauce-list {
@@ -92,7 +92,7 @@
 }
 
 /* ================================================= */
-/* 📱 TABLETTE PORTRAIT → 2 COLONNES */
+/* 📱 MOBILE PAYSAGE + TABLETTE PORTRAIT → 2 COLONNES */
 /* ================================================= */
 @media (min-width: 600px) and (max-width: 899px) {
   .sauce-list {
@@ -115,7 +115,7 @@
 }
 
 /* ================================================= */
-/* 📱 TABLETTE PAYSAGE → 3 COLONNES */
+/* 📱 TABLETTE PAYSAGE + PETIT PC → 3 COLONNES */
 /* ================================================= */
 @media (min-width: 900px) and (max-width: 1199px) {
   .sauce-list {
@@ -128,7 +128,7 @@
   }
 }
 /* ================================================= */
-/* 🖥 PC → 5 COLONNES FIXES */
+/* 🖥 PC → 4 COLONNES FIXES */
 /* ================================================= */
 
 @media (min-width: 1200px) and (max-width: 1599px) {
@@ -149,6 +149,10 @@
     height: 380px;
   }
 }
+
+/* ================================================= */
+/* 🖥 PC TRES GRAND ECRAN → 5 COLONNES FIXES */
+/* ================================================= */
 @media (min-width: 1600px) {
   .sauce-list {
     grid-template-columns: repeat(5, 1fr);
